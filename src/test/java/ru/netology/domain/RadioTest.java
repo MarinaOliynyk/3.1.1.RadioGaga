@@ -5,44 +5,72 @@ import org.junit.jupiter.api.Test;
 import static org.junit.jupiter.api.Assertions.*;
 
 class RadioTest {
-    Radio gaga = new Radio();
 
     @Test
     void shouldNextStationIfFinalStation() {
-        gaga.setCurrentRadioStation(9);
+        Radio gaga = new Radio(10,10);
+        gaga.nextRadioStation();
+        assertEquals(0, gaga.getCurrentRadioStation());
+    }
+
+    @Test
+    void shouldNextStationOverFinalStation() {
+        Radio gaga = new Radio(56,56);
+        gaga.nextRadioStation();
+        assertEquals(0, gaga.getCurrentRadioStation());
+    }
+
+    @Test
+    void shouldNextStationOverMax() {
+        Radio gaga = new Radio(57,56);
         gaga.nextRadioStation();
         assertEquals(0, gaga.getCurrentRadioStation());
     }
 
     @Test
     void shouldNextRadioStation() {
-        gaga.setCurrentRadioStation(2);
+        Radio gaga = new Radio(2,10);
         gaga.nextRadioStation();
         assertEquals(3, gaga.getCurrentRadioStation());
     }
 
     @Test
-    void shouldPrevStationIfStartStation() {
-        gaga.setCurrentRadioStation(0);
+    void shouldPrevStationIfCurrentStationMin() {
+        Radio gaga = new Radio(0,10);
         gaga.prevRadioStation();
-        assertEquals(9, gaga.getCurrentRadioStation());
+        assertEquals(10, gaga.getCurrentRadioStation());
+    }
+
+    @Test
+    void shouldPrevStationIfCurrentStationStart() {
+        Radio gaga = new Radio(0,56);
+        gaga.prevRadioStation();
+        assertEquals(56, gaga.getCurrentRadioStation());
+    }
+
+    @Test
+    void shouldPrevStationIfCurrentStationLessStart() {
+        Radio gaga = new Radio(-1,56);
+        gaga.prevRadioStation();
+        assertEquals(56, gaga.getCurrentRadioStation());
     }
 
     @Test
     void shouldPrevRadioStation() {
-        gaga.setCurrentRadioStation(3);
+        Radio gaga = new Radio(3,10);
         gaga.prevRadioStation();
         assertEquals(2, gaga.getCurrentRadioStation());
     }
 
     @Test
     void shouldControlNumButtonStation() {
-        gaga.setCurrentRadioStation(5);
+        Radio gaga = new Radio(5,10);
         assertEquals(5, gaga.getCurrentRadioStation());
     }
 
     @Test
     void shouldSoundVolumeUp() {
+        Radio gaga = new Radio();
         gaga.setCurrentSoundVolume(9);
         gaga.shouldSoundVolumeUp();
         assertEquals(10, gaga.getCurrentSoundVolume());
@@ -50,6 +78,7 @@ class RadioTest {
 
     @Test
     void shouldSoundVolumeDown() {
+        Radio gaga = new Radio();
         gaga.setCurrentSoundVolume(7);
         gaga.shouldSoundVolumeDown();
         assertEquals(6, gaga.getCurrentSoundVolume());
@@ -57,14 +86,32 @@ class RadioTest {
 
     @Test
     void shouldSoundVolumeUpControl() {
-        gaga.setCurrentSoundVolume(10);
+        Radio gaga = new Radio();
+        gaga.setCurrentSoundVolume(100);
         gaga.shouldSoundVolumeUp();
-        assertEquals(10, gaga.getCurrentSoundVolume());
+        assertEquals(100, gaga.getCurrentSoundVolume());
+    }
+
+    @Test
+    void shouldSoundVolumeUpControlOverMax() {
+        Radio gaga = new Radio();
+        gaga.setCurrentSoundVolume(101);
+        gaga.shouldSoundVolumeUp();
+        assertEquals(100, gaga.getCurrentSoundVolume());
     }
 
     @Test
     void shouldSoundVolumeDownControl() {
+        Radio gaga = new Radio();
         gaga.setCurrentSoundVolume(0);
+        gaga.shouldSoundVolumeDown();
+        assertEquals(0, gaga.getCurrentSoundVolume());
+    }
+
+    @Test
+    void shouldSoundVolumeDownControlLessMin() {
+        Radio gaga = new Radio();
+        gaga.setCurrentSoundVolume(-1);
         gaga.shouldSoundVolumeDown();
         assertEquals(0, gaga.getCurrentSoundVolume());
     }
